@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+
+repos="$HOME/.dotsplat/repos"
+dotsplat="$repos/homeshick"
+# It's either this^ or the one below:
+# scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# The install script however symlinks us. So $0 changes.
+
+source $dotsplat/utils/log.sh
+source $dotsplat/utils/fs.sh
+source $dotsplat/utils/git.sh
+source $dotsplat/utils/help.sh
+source $dotsplat/utils/exit_status.sh
+
+exit_status=$EX_SUCCESS
+
+test -x $(which git) || err $EX_SOFTWARE "git not found in path"
+
+mkdir -p "$repos"
+
+T_START=$(date +%s)
+GIT_VERSION=$(git --version | grep 'git version' | cut -d ' ' -f 3)
+if [[ ! $GIT_VERSION =~ ([0-9]+)(\.[0-9]+){0,3} ]]; then
+	err $EX_SOFTWARE "could not determine git version"
+fi
+
+TALK=true
+SKIP=false
+FORCE=false
+BATCH=false
+
+# Retrieve all the flags preceeding a subcommand
+while [[ $# -gt 0 ]]; do
+	if [[ $1 =~ ^- ]]; then
+		# Convert combined short options into multiples short options (e.g. `-qb' to `-q -b')
+		if [[ $1 =~ ^-[a-z]{2,} ]]; then
+			param=$1
+			shift
+			set -- ${param:0:2} -${param:2} $@
+			unset param
+		fi
+		case $1 in
+			-h | --help)  cmd="help" ; shift; continue ;;
+			-q | --quiet) TALK=false ; shift; continue ;;
+			-s | --skip)  SKIP=true  ; shift; continue ;;
+			-f | --force) FORCE=true ; shift; continue ;;
+			-b | --batch) BATCH=true ; shift; continue ;;
+			*)     err $EX_USAGE "Unknown option '$1'" ;;
+		esac
+	else
+		break
+	fi
+done
+
+[[ $# -gt 0 ]] || cmd="help"
+
+# Get the subcommand
+valid_commands=(cd clone generate list check updates refresh pull symlink link track help)
+if [[ ! $cmd ]]; then
+	if [[ " ${valid_commands[*]} " =~ " $1 " ]]; then
+		cmd=$1
+		shift
+	fi
+	if [[ ! $cmd ]]; then
+		err $EX_USAGE "Unknown command '$1'"
+	fi
+fi
+
+# Get the arguments for the subcommand, also parse flags if there are any left
+while [[ $# -gt 0 ]]; do
+	if [[ $1 =~ ^- ]]; then
+		# Convert combined short options into multiples short options (e.g. `-qb' to `-q -b')
+		if [[ $1 =~ ^-[a-z]{2,} ]]; then
+			param=$1
+			shift
+			set -- ${param:0:2} -${param:2} $@
+			unset param
+		fi
+		case $1 in
+			-h | --help)  cmd="help" ; shift; continue ;;
+			-q | --quiet) TALK=false ; shift; continue ;;
+			-s | --skip)  SKIP=true  ; shift; continue ;;
+			-f | --force) FORCE=true ; shift; continue ;;
+			-b | --batch) BATCH=true ; shift; continue ;;
+			*)     err $EX_USAGE "Unknown option '$1'" ;;
+		esac
+	fi
+
+	case $cmd in
+		cd | clone | generate | check | updates | pull | symlink | link)
+			params+=("$1")
+			shift; continue ;;
+		refresh)
+			[[ ! $threshhold ]] && threshhold=$[$1*86400] || params+=("$1")
+			shift; continue ;;
+		track)
+			[[ ! $castle ]] && castle=$1 || params+=("$1")
+			shift; continue ;;
+		list) err $EX_USAGE "The 'list' command does not take any arguments" ;;
+		help)
+			[[ ! $help_cmd ]] && help_cmd=$1
+			shift; continue;;
+		*) err $EX_USAGE "Unknown command '$1'" ;;
+	esac
+done
+
+# If no additional arguments are given, run the subcommand for every castle
+if [[ ! $params ]]; then
+	case $cmd in
+		check | updates | refresh | pull | symlink | link)
+			while IFS= read -d $'\n' -r name ; do
+				params+=("$name")
+			done < <(list_castle_names) ;;
+		# These commands require parameters, show the help message instead
+		cd | clone | generate | track) help_cmd=$cmd; cmd="help"; exit_status=$EX_USAGE ;;
+	esac
+fi
+
+# Default param for refresh is 7
+[[ ! $threshhold ]] && threshhold=$[7*86400]
+
+case $cmd in
+	list)  list           ;;
+	cd)    help cd        ;; # cd is implemented in the dotsplat.{sh,csh} helper script.
+	help)  help $help_cmd ;;
+	*)
+		for param in "${params[@]}"; do
+			case $cmd in
+				clone)         clone "$param"               ;;
+				generate)      generate "$param"            ;;
+				check|updates) check "$param"               ;;
+				refresh)       refresh $threshhold "$param" ;;
+				pull)          pull "$param"                ;;
+				symlink|link)  symlink "$param"             ;;
+				track)         track "$castle" "$param"     ;;
+			esac
+			result=$?
+			if [[ $exit_status == 0 && $result != 0 ]]; then
+				exit_status=$result
+			fi
+		done
+		case $cmd in
+			clone)   symlink_cloned_files ${params[*]}      ;;
+			refresh) pull_outdated $threshhold ${params[*]} ;;
+			pull)    symlink_new_files ${params[*]}         ;;
+		esac
+		result=$?
+		if [[ $exit_status == 0 && $result != 0 ]]; then
+			exit_status=$result
+		fi
+		;;
+esac
+
+exit $exit_status
