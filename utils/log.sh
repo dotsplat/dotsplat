@@ -66,7 +66,7 @@ function success {
 
 # Singleline prompt that stays on the same line even if you press enter.
 # Automatically colors the line according to the answer the user gives.
-# Currently homeshick only has prompts with "no" as the default,
+# Currently dotsplat only has prompts with "no" as the default,
 # so there's no reason to implement prompt_yes right now
 function prompt_no {
 	local OTALK=$TALK

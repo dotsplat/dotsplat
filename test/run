@@ -7,7 +7,7 @@ test_suites=()
 while [[ $# -gt 0 ]]; do
 	case $1 in
 		-h | --help)
-			printf "Run homeshick unit tests\n"
+			printf "Run dotsplat unit tests\n"
 			printf " Usage: run [options] [SUITES..]\n"
 			printf " Options:\n"
 			printf "   -p, --keep-path   # Prevent \$PATH modifications\n"
@@ -84,19 +84,19 @@ export NOTHOME=$SCRIPTDIR/nothome
 rm -rf $REPO_FIXTURES $HOME $NOTHOME
 mkdir -p $REPO_FIXTURES $HOME $NOTHOME
 
-export HOMESICK=$HOME/.homesick
-export HOMESHICK_FN="homeshick"
-export HOMESHICK_FN_SRC=$HOMESICK/repos/homeshick/homeshick.sh
-export HOMESHICK_BIN=$HOMESICK/repos/homeshick/bin/homeshick
-export HOMESHICK_SH=$HOMESICK/repos/homeshick/bin/homeshick.sh
-export HOMESHICK_CSH=$HOMESICK/repos/homeshick/bin/homeshick.csh
-export HOMESHICK_SRC="source $HOMESHICK_SH"
+export DOTSPLAT=$HOME/.dotsplat
+export DOTSPLAT_FN="dotsplat"
+export DOTSPLAT_FN_SRC=$DOTSPLAT.git/dotsplat/dotsplat.sh
+export DOTSPLAT_BIN=$DOTSPLAT.git/dotsplat/bin/dotsplat
+export DOTSPLAT_SH=$DOTSPLAT.git/dotsplat/bin/dotsplat.sh
+export DOTSPLAT_CSH=$DOTSPLAT.git/dotsplat/bin/dotsplat.csh
+export DOTSPLAT_SRC="source $DOTSPLAT_SH"
 
 source $SCRIPTDIR/repo_fixtures.sh
 setup_repo_fixtures
 
-source $SCRIPTDIR/link_homeshick.sh
-setup_homeshick
+source $SCRIPTDIR/link_dotsplat.sh
+setup_dotsplat
 
 set +e
 

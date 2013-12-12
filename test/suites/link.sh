@@ -1,41 +1,41 @@
 #!/bin/bash
 
 function oneTimeSetUp() {
-	source $HOMESHICK_FN_SRC
-	$HOMESHICK_FN --batch clone $REPO_FIXTURES/rc-files > /dev/null
-	$HOMESHICK_FN --batch clone $REPO_FIXTURES/dotfiles > /dev/null
-	$HOMESHICK_FN --batch clone $REPO_FIXTURES/module-files > /dev/null
-	$HOMESHICK_FN --batch clone "$REPO_FIXTURES/repo with spaces in name" > /dev/null
+	source $DOTSPLAT_FN_SRC
+	$DOTSPLAT_FN --batch clone $REPO_FIXTURES/rc-files > /dev/null
+	$DOTSPLAT_FN --batch clone $REPO_FIXTURES/dotfiles > /dev/null
+	$DOTSPLAT_FN --batch clone $REPO_FIXTURES/module-files > /dev/null
+	$DOTSPLAT_FN --batch clone "$REPO_FIXTURES/repo with spaces in name" > /dev/null
 }
 
 function oneTimeTearDown() {
-	rm -rf "$HOMESICK/repos/rc-files"
-	rm -rf "$HOMESICK/repos/dotfiles"
-	rm -rf "$HOMESICK/repos/module-files"
-	rm -rf "$HOMESICK/repos/repo with spaces in name"
+	rm -rf "$DOTSPLAT/repos/rc-files"
+	rm -rf "$DOTSPLAT/repos/dotfiles"
+	rm -rf "$DOTSPLAT/repos/module-files"
+	rm -rf "$DOTSPLAT/repos/repo with spaces in name"
 }
 
 function tearDown() {
-	find "$HOME" -mindepth 1 -not -path "${HOMESICK}*" -delete
+	find "$HOME" -mindepth 1 -not -path "${DOTSPLAT}*" -delete
 }
 
 
 function testOverwritePrompt() {
 	touch $HOME/.bashrc
-	$HOMESHICK_FN --batch link rc-files > /dev/null
+	$DOTSPLAT_FN --batch link rc-files > /dev/null
 	assertTrue "\`link' overwrote .bashrc" "[ -f $HOME/.bashrc -a ! -L $HOME/.bashrc ]"
 }
 
 function testOverwriteSkip() {
 	touch $HOME/.bashrc
-	$HOMESHICK_FN --skip link rc-files > /dev/null
+	$DOTSPLAT_FN --skip link rc-files > /dev/null
 	assertTrue "\`link' overwrote .bashrc" "[ -f $HOME/.bashrc -a ! -L $HOME/.bashrc ]"
 }
 
 function testReSymlinkDirectory() {
-	$HOMESHICK_FN --batch link module-files > /dev/null
+	$DOTSPLAT_FN --batch link module-files > /dev/null
 	local inode_before=$(get_inode_no $HOME/.my_module)
-	$HOMESHICK_FN --batch link module-files > /dev/null
+	$DOTSPLAT_FN --batch link module-files > /dev/null
 	local inode_after=$(get_inode_no $HOME/.my_module)
 	assertSame "\`link' re-linked the .my_module directory symlink" $inode_before $inode_after
 }
@@ -59,39 +59,39 @@ EOF
 	#.config/foo.conf should be overwritten by a directory of the same name
 	assertTrue "The .config/bar.dir/ directory did not exist before symlinking" "[ -d $HOME/.config/bar.dir ]"
 	#.config/bar.dir should be overwritten by a file of the same name
-	$HOMESHICK_FN --batch --force link dotfiles > /dev/null
+	$DOTSPLAT_FN --batch --force link dotfiles > /dev/null
 	assertTrue "'link' did not symlink the .config/foo.conf directory" "[ -d $HOME/.config/foo.conf ]"
 	assertTrue "'link' did not symlink the .config/bar.dir directory" "[ -f $HOME/.config/bar.dir ]"
 }
 
 function testSymlinkDirectory() {
-	$HOMESHICK_FN --batch link module-files > /dev/null
+	$DOTSPLAT_FN --batch link module-files > /dev/null
 	assertTrue "'link' did not symlink the .my_module symlink" "[ -L $HOME/.my_module ]"
 }
 
 function testGitDirIgnore() {
-	$HOMESHICK_FN --batch link dotfiles > /dev/null
+	$DOTSPLAT_FN --batch link dotfiles > /dev/null
 	assertFalse "'link' did not ignore the .git submodule file" "[ -e $HOME/.vim/.git ]"
 }
 
 function testCastleWithSpacesInName() {
-	$HOMESHICK_FN --batch link repo\ with\ spaces\ in\ name > /dev/null
+	$DOTSPLAT_FN --batch link repo\ with\ spaces\ in\ name > /dev/null
 	assertSame "\`link' did not exit with status 0" 0 $?
 	assertTrue "'link' did not symlink the .repowithspacesfile file" "[ -f $HOME/.repowithspacesfile ]"
 }
 
 function testMultipleCastles() {
-	$HOMESHICK_FN --batch link rc-files dotfiles repo\ with\ spaces\ in\ name > /dev/null
-	assertSymlink $HOMESICK/repos/rc-files/home/.bashrc $HOME/.bashrc
-	assertSymlink $HOMESICK/repos/dotfiles/home/.ssh/known_hosts $HOME/.ssh/known_hosts
-	assertSymlink "$HOMESICK/repos/repo with spaces in name/home/.repowithspacesfile" $HOME/.repowithspacesfile
+	$DOTSPLAT_FN --batch link rc-files dotfiles repo\ with\ spaces\ in\ name > /dev/null
+	assertSymlink $DOTSPLAT/repos/rc-files/home/.bashrc $HOME/.bashrc
+	assertSymlink $DOTSPLAT/repos/dotfiles/home/.ssh/known_hosts $HOME/.ssh/known_hosts
+	assertSymlink "$DOTSPLAT/repos/repo with spaces in name/home/.repowithspacesfile" $HOME/.repowithspacesfile
 }
 
 function testAllCastles() {
-	$HOMESHICK_FN --batch link > /dev/null
-	assertSymlink $HOMESICK/repos/rc-files/home/.bashrc $HOME/.bashrc
-	assertSymlink $HOMESICK/repos/dotfiles/home/.ssh/known_hosts $HOME/.ssh/known_hosts
-	assertSymlink "$HOMESICK/repos/repo with spaces in name/home/.repowithspacesfile" $HOME/.repowithspacesfile
+	$DOTSPLAT_FN --batch link > /dev/null
+	assertSymlink $DOTSPLAT/repos/rc-files/home/.bashrc $HOME/.bashrc
+	assertSymlink $DOTSPLAT/repos/dotfiles/home/.ssh/known_hosts $HOME/.ssh/known_hosts
+	assertSymlink "$DOTSPLAT/repos/repo with spaces in name/home/.repowithspacesfile" $HOME/.repowithspacesfile
 }
 
 function get_inode_no() {

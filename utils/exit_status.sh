@@ -40,7 +40,7 @@ EX_EXEC_FAIL=128  # Failed to execute subprocess            ## source: B
 EX_SIGTERM=130    # Script terminated by Control-C          ## source: A
 
 
-# Custom homeshick status codes (range: 79-113)
+# Custom dotsplat status codes (range: 79-113)
 EX_AHEAD=85       # local HEAD is ahead of its upstream branch
 EX_BEHIND=86      # local HEAD is behind its upstream branch
 EX_TH_EXCEEDED=87 # Time since last repository update is larger than the threshhold

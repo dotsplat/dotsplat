@@ -1,12 +1,12 @@
 # This script should be sourced in the context of your shell like so:
-# source $HOME/.homeshick/repos/.homeshick/homeshick.sh
-# Once the homeshick() function is defined, you can type
-# "homeshick cd CASTLE" to enter a castle.
+# source $HOME/.dotsplat.git/dotsplat.sh
+# Once the dotsplat() function is defined, you can type
+# "dotsplat cd CASTLE" to enter a castle.
 
-function homeshick() {
+function dotsplat() {
 	if [ "$1" = "cd" ] && [ -n "$2" ]; then
-		cd "$HOME/.homesick/repos/$2"
+		cd "$HOME/.dotsplat/repos/$2"
 	else
-		$HOME/.homesick/repos/homeshick/bin/homeshick "$@"
+		$HOME/.dotsplat.git/bin/dotsplat "$@"
 	fi
 }

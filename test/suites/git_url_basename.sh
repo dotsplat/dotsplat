@@ -1,19 +1,19 @@
 #!/usr/bin/env bash -e
 
 function oneTimeSetUp() {
-	source $HOMESICK/repos/homeshick/utils/git.sh
+	source $DOTSPLAT/repos/dotsplat/utils/git.sh
 }
 
 function testSSH() {
-	assertSame "homeshick" $(repo_basename 'git@github.com:andsens/homeshick.git')
+	assertSame "dotsplat" $(repo_basename 'git@github.com:hovr2pi/dotsplat.git')
 }
 
 function testHTTP() {
-	assertSame "homeshick" $(repo_basename 'https://github.com/andsens/homeshick.git')
+	assertSame "dotsplat" $(repo_basename 'https://github.com/hovr2pi/dotsplat.git')
 }
 
 function testFilepath() {
-	assertSame "homeshick" $(repo_basename '/home/username/homeshick.git')
+	assertSame "dotsplat" $(repo_basename '/home/username/dotsplat.git')
 }
 
 function testSSHWithDot() {
@@ -33,7 +33,7 @@ function testNumbers() {
 }
 
 function testSSHNoExtension() {
-	assertSame "homeshick" $(repo_basename 'git@github.com:andsens/homeshick')
+	assertSame "dotsplat" $(repo_basename 'git@github.com:hovr2pi/dotsplat')
 }
 
 function testSSHWithDotNoExtension() {
@@ -41,7 +41,7 @@ function testSSHWithDotNoExtension() {
 }
 
 function testFilepathNoExtension() {
-	assertSame "homeshick" $(repo_basename '/home/username/homeshick')
+	assertSame "dotsplat" $(repo_basename '/home/username/dotsplat')
 }
 
 function testFilepathWithColon() {

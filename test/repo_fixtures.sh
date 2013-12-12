@@ -1,10 +1,10 @@
 #!/bin/bash
 
 function setup_repo_fixtures {
-	local git_username="Homeshick user"
-	local git_useremail="homeshick@example.com"
+	local git_username="Dotsplat user"
+	local git_useremail="dotsplat@example.com"
 
-	# Create the repos for homeshick to use as test repositories
+	# Create the repos for dotsplat to use as test repositories
 	local rc_files="$REPO_FIXTURES/rc-files"
 	(
 		git init $rc_files
