@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 repos="$HOME/.dotsplat/repos"
-dotsplat="$repos/homeshick"
+dotsplat="$HOME/.dotsplat.git"
 # It's either this^ or the one below:
 # scriptdir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 # The install script however symlinks us. So $0 changes.
