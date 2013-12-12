@@ -19,7 +19,41 @@ All of the documentation provided with homeshick applies to dotsplat:
 
 Installation
 ============
+```bash
+$ curl -fsSL http://install.hovr2pi.org/dotsplat | bash
+```
+
+Create a `dotfiles` repo on any git server and then use dotsplat to clone the empty repo
 
 ```bash
-$ git clone git://github.com/hovr2pi/dotsplat.git $HOME/.dotsplat/dotsplat.git
+$ dotsplat clone https://github.com/$USERNAME/dotfiles
 ```
+
+Then add your current dotfiles
+
+```bash
+$ dotsplat track $HOME/.somedotfile1
+$ dotsplat track $HOME/.somedotfile2
+...
+```
+
+And finally commit your dotfiles to git
+
+```bash
+$ dotsplat cd dotfiles
+$ git commit -a
+$ git push -u origin master
+```
+
+and that is the basic workflow
+
+Customization
+=============
+If you are not happy with your current dotfiles, you can start with a fork of [dotsplat-example](https://github.com/hovr2pi/dotsplat-example).
+
+After you have forked it, go to settings and rename it to `dotfiles` and then go
+customize the hell out of it!
+
+
+
+
