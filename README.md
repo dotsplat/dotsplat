@@ -3,7 +3,6 @@ dotsplat
 dotsplat is a fork of the excellent project [homeshick](https://github.com/andsens/homeshick) developed by [@andsens](https://github.com/andsens). Like homeshick, dotsplat keeps your dotfiles up to date using only git and bash. The main difference is that dotsplat imposes design decisions about how dotfiles should be deployed and thus can provide a framework on top of the base install to help provide:
 
 * a consistent experience across both Mac and Linux systems
-* documented examples that can benefit veteran and new users
 * a flexible and modular dotfile design 
 * a platform for unix education of dotfile managment for my classes and short courses
 
