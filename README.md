@@ -49,10 +49,10 @@ and that is the basic workflow
 
 Customization
 =============
-If you are not happy with your current dotfiles, you can start with a fork of [dotsplat-example](https://github.com/hovr2pi/dotsplat-example).
+If you are not happy with your current dotfiles, you can start with a fork of [dotsplat/dotfiles](https://github.com/dotsplat/dotfiles).
 
-After you have forked it, go to settings and rename it to `dotfiles` and then go
-customize the hell out of it!
+After you have forked it, go customize the hell out of it and consider sending pull
+requests of cool stuff back upstream so other's can benefit from your genius.
 
 
 
