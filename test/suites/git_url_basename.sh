@@ -1,7 +1,7 @@
 #!/usr/bin/env bash -e
 
 function oneTimeSetUp() {
-	source $DOTSPLAT/repos/dotsplat/utils/git.sh
+	source $DOTSPLAT.git/utils/git.sh
 }
 
 function testSSH() {
