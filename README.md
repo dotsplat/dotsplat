@@ -19,6 +19,12 @@ Installation
 $ curl -fsSL http://install.hovr2pi.org/dotsplat | bash
 ```
 
+Setup dotsplat in the current shell
+
+```bash
+$ source $HOME/.dotsplat.git/dotsplat.sh
+```
+
 Create a `dotfiles` repo on any git server and then use dotsplat to clone the empty repo
 
 ```bash
