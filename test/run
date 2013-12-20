@@ -86,10 +86,10 @@ mkdir -p $REPO_FIXTURES $HOME $NOTHOME
 
 export DOTSPLAT=$HOME/.dotsplat
 export DOTSPLAT_FN="dotsplat"
-export DOTSPLAT_FN_SRC=$DOTSPLAT.git/dotsplat/dotsplat.sh
-export DOTSPLAT_BIN=$DOTSPLAT.git/dotsplat/bin/dotsplat
-export DOTSPLAT_SH=$DOTSPLAT.git/dotsplat/bin/dotsplat.sh
-export DOTSPLAT_CSH=$DOTSPLAT.git/dotsplat/bin/dotsplat.csh
+export DOTSPLAT_FN_SRC=$DOTSPLAT.git/dotsplat.sh
+export DOTSPLAT_BIN=$DOTSPLAT.git/bin/dotsplat
+export DOTSPLAT_SH=$DOTSPLAT.git/bin/dotsplat.sh
+export DOTSPLAT_CSH=$DOTSPLAT.git/bin/dotsplat.csh
 export DOTSPLAT_SRC="source $DOTSPLAT_SH"
 
 source $SCRIPTDIR/repo_fixtures.sh
