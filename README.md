@@ -34,8 +34,8 @@ $ dotsplat clone https://github.com/$USERNAME/dotfiles
 Then add your current dotfiles
 
 ```bash
-$ dotsplat track $HOME/.somedotfile1
-$ dotsplat track $HOME/.somedotfile2
+$ dotsplat track dotfiles $HOME/.somedotfile1
+$ dotsplat track dotfiles $HOME/.somedotfile2
 ...
 ```
 
